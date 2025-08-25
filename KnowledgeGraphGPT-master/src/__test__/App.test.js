@@ -1,32 +1,33 @@
+// src/__test__/App.test.js
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import App from "../App";
 
-// Mock Graph to isolate App testing
+// Mock Graph to isolate App testing (don’t require cytoscape to run)
 jest.mock("../Graph", () => () => <div data-testid="graph-mock" />);
 
-test("renders app UI and interacts with key input fields", () => {
+test("renders app and respects OpenRouter default + key gating", () => {
   render(<App />);
 
-  // Check for title
+  // Title shows
   expect(screen.getByText(/KnowledgeGraph GPT/i)).toBeInTheDocument();
 
-  // Check for prompt input
+  // Prompt input shows
   const promptInput = screen.getByPlaceholderText("Enter your prompt");
   expect(promptInput).toBeInTheDocument();
 
-  // Check for API key input
-  const apiKeyInput = screen.getByPlaceholderText("Enter your OpenAI API Key");
+  // API key input shows with OpenRouter placeholder (new default)
+  const apiKeyInput = screen.getByPlaceholderText("Enter your OpenRouter API Key");
   expect(apiKeyInput).toBeInTheDocument();
 
-  // Check for Generate button and that it's initially disabled
+  // Generate button exists and is disabled until key entered
   const generateButton = screen.getByRole("button", { name: /generate/i });
   expect(generateButton).toBeDisabled();
 
-  // Simulate entering API key to enable button
-  fireEvent.change(apiKeyInput, { target: { value: "sk-test" } });
+  // Type a fake key to enable the button
+  fireEvent.change(apiKeyInput, { target: { value: "or_test_key_123" } });
   expect(generateButton).not.toBeDisabled();
 
-  // Check that Graph is rendered
+  // Graph mock renders
   expect(screen.getByTestId("graph-mock")).toBeInTheDocument();
 });
