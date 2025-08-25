@@ -102,5 +102,19 @@ input[type="file"] {
 
 .buttonContainer {
   display: flex;
-  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.leftControls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

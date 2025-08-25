@@ -103,70 +103,71 @@ function App() {
           Convert unstructured text into a knowledge graph using your chosen LLM provider.
         </p>
 
-        {/* NEW: Endpoint selector */}
-        <div style={{ marginBottom: 10 }}>
-          <label style={{ marginRight: 8, color: "#555" }}>API Endpoint:</label>
-          <select value={endpointKey} onChange={handleEndpointChange}>
-            <option value="OPENROUTER">OpenRouter (default)</option>
-            <option value="OPENAI">OpenAI</option>
-          </select>
-        </div>
+        <div className="topBar">
+          <div className="leftControls">
+            {/* NEW: Endpoint selector */}
+            <div style={{ marginBottom: 10 }}>
+              <label style={{ marginRight: 8, color: "#555" }}>API Endpoint:</label>
+              <select value={endpointKey} onChange={handleEndpointChange}>
+                <option value="OPENROUTER">OpenRouter (default)</option>
+                <option value="OPENAI">OpenAI</option>
+              </select>
+            </div>
 
-        <input
-          type="password"
-          onChange={handleKeyChange}
-          value={key}
-          className="keyInput"
-          placeholder={
-            endpointKey === "OPENROUTER"
-              ? "Enter your OpenRouter API Key"
-              : "Enter your OpenAI API Key"
-          }
-        />
-        <br />
-        <input
-          type="text"
-          onChange={handlePromptChange}
-          value={prompt}
-          className="promptInput"
-          placeholder="Enter your prompt"
-        />
-
-        <button
-          onClick={handleSubmit}
-          className="submitButton"
-          disabled={loading || key.length < 1}
-        >
-          {loading ? "Loading" : "Generate"}
-        </button>
-        <br />
-
-        <div className="buttonContainer">
-          <button
-            className="submitButton"
-            style={{ marginLeft: 5 }}
-            onClick={() => dispatch({ type: ACTIONS.CLEAR_GRAPH })}
-          >
-            Clear
-          </button>
-          <button
-            className="submitButton"
-            style={{ marginLeft: 5 }}
-            onClick={() => exportData(graphState?.edges)}
-            disabled={graphState?.edges?.length < 1}
-          >
-            Export JSON
-          </button>
-          <label className="custom-file-upload">
             <input
-              type="file"
-              accept=".json"
-              onChange={handleJSONImport}
-              value={file}
+              type="password"
+              onChange={handleKeyChange}
+              value={key}
+              className="keyInput"
+              placeholder={
+                endpointKey === "OPENROUTER"
+                  ? "Enter your OpenRouter API Key"
+                  : "Enter your OpenAI API Key"
+              }
             />
-            Import JSON
-          </label>
-          <LayoutSelector option={option} setOptions={setOptions} />
+            <input
+              type="text"
+              onChange={handlePromptChange}
+              value={prompt}
+              className="promptInput"
+              placeholder="Enter your prompt"
+            />
+            <button
+              onClick={handleSubmit}
+              className="submitButton"
+              disabled={loading || key.length < 1}
+            >
+              {loading ? "Loading" : "Generate"}
+            </button>
+          </div>
+
+          <div className="buttonContainer">
+            <button
+              className="submitButton"
+              style={{ marginLeft: 5 }}
+              onClick={() => dispatch({ type: ACTIONS.CLEAR_GRAPH })}
+            >
+              Clear
+            </button>
+            <button
+              className="submitButton"
+              style={{ marginLeft: 5 }}
+              onClick={() => exportData(graphState?.edges)}
+              disabled={graphState?.edges?.length < 1}
+            >
+              Export JSON
+            </button>
+            <label className="custom-file-upload">
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleJSONImport}
+                value={file}
+              />
+              Import JSON
+            </label>
+            <LayoutSelector option={option} setOptions={setOptions} />
+          </div>
         </div>
       </div>
       <Graph data={graphState} layout={option} />
