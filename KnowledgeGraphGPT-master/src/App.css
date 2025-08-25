@@ -1,8 +1,6 @@
 .mainContainer {
   text-align: center;
   padding: 1%;
-  width: 60%;
-  margin-left: 20%;
   background-color: #ECEFF1;
 }
 
@@ -17,11 +15,9 @@ body {
 }
 
 .App {
-  
   height: 100vh;
   font-family: 'Roboto', sans-serif;
 }
-
 
 .text {
   color: #9E9E9E;
@@ -37,15 +33,15 @@ body {
 .promptInput {
   border: 0.01px solid #ccc;
   padding: 10px 10px;
-  width: 49%;
+  width: 100%;
   margin-bottom: 10px;
 }
 
 .keyInput {
   border: 0.01px solid #ccc;
   padding: 10px 10px;
-  width: 58%;
-  margin-bottom: 10px; 
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .submitButton {
@@ -100,21 +96,45 @@ input[type="file"] {
   display: none;
 }
 
+/* (Legacy) unused in new layout but harmless to keep */
 .buttonContainer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
-
 .topBar {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
 }
-
 .leftControls {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+/* NEW: three-pane layout */
+.layout {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 12px 0;
+}
+
+.centerPane {
+  flex: 1 1 60%;
+}
+
+.leftSidebar,
+.rightSidebar {
+  flex: 0 0 20%;
+  background: #ECEFF1;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+/* vertical spacing helper */
+.stack > * + * {
+  margin-top: 8px;
 }
