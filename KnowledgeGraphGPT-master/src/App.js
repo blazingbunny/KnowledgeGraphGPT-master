@@ -26,7 +26,7 @@ function App() {
   const [key, setKey] = useState("");
   const handleKeyChange = (e) => setKey(e.target.value);
 
-  // NEW: endpoint selection (default: OpenRouter)
+  // Endpoint dropdown
   const [endpointKey, setEndpointKey] = useState("OPENROUTER");
   const handleEndpointChange = (e) => setEndpointKey(e.target.value);
 
@@ -59,16 +59,11 @@ function App() {
           messages: [{ role: "system", content: promptText }],
         };
 
-        // Choose URL from dropdown
         const url = ENDPOINTS[endpointKey];
-
-        // Compose headers
         const hdrs = {
           ...requestOptions.headers,
           Authorization: "Bearer " + key,
         };
-
-        // Optional: OpenRouter-friendly header (browser automatically sends Referer)
         if (endpointKey === "OPENROUTER") {
           hdrs["X-Title"] = "KnowledgeGraph GPT";
         }
@@ -97,16 +92,20 @@ function App() {
 
   return (
     <div className="App">
+      {/* Header */}
       <div className="mainContainer">
         <h1 className="title">KnowledgeGraph GPT</h1>
         <p className="text">
           Convert unstructured text into a knowledge graph using your chosen LLM provider.
         </p>
+      </div>
 
-        <div className="topBar">
-          <div className="leftControls">
-            {/* NEW: Endpoint selector */}
-            <div style={{ marginBottom: 10 }}>
+      {/* Three-pane layout */}
+      <div className="layout">
+        {/* LEFT: API Endpoint + Key + Prompt + Generate */}
+        <aside className="leftSidebar">
+          <div className="stack">
+            <div>
               <label style={{ marginRight: 8, color: "#555" }}>API Endpoint:</label>
               <select value={endpointKey} onChange={handleEndpointChange}>
                 <option value="OPENROUTER">OpenRouter (default)</option>
@@ -125,6 +124,7 @@ function App() {
                   : "Enter your OpenAI API Key"
               }
             />
+
             <input
               type="text"
               onChange={handlePromptChange}
@@ -132,6 +132,7 @@ function App() {
               className="promptInput"
               placeholder="Enter your prompt"
             />
+
             <button
               onClick={handleSubmit}
               className="submitButton"
@@ -140,23 +141,18 @@ function App() {
               {loading ? "Loading" : "Generate"}
             </button>
           </div>
+        </aside>
 
-          <div className="buttonContainer">
-            <button
-              className="submitButton"
-              style={{ marginLeft: 5 }}
-              onClick={() => dispatch({ type: ACTIONS.CLEAR_GRAPH })}
-            >
-              Clear
-            </button>
-            <button
-              className="submitButton"
-              style={{ marginLeft: 5 }}
-              onClick={() => exportData(graphState?.edges)}
-              disabled={graphState?.edges?.length < 1}
-            >
-              Export JSON
-            </button>
+        {/* CENTER: Graph */}
+        <main className="centerPane">
+          <Graph data={graphState} layout={option} />
+        </main>
+
+        {/* RIGHT: Layout + Import/Export/Clear */}
+        <aside className="rightSidebar">
+          <div className="stack" style={{ alignItems: "flex-end" }}>
+            <LayoutSelector option={option} setOptions={setOptions} />
+
             <label className="custom-file-upload">
               <input
                 type="file"
@@ -166,29 +162,23 @@ function App() {
               />
               Import JSON
             </label>
-            <LayoutSelector option={option} setOptions={setOptions} />
-          </div>
-        </div>
-      </div>
-      <Graph data={graphState} layout={option} />
-      <div className="footer">
-        <p>Copyrights © {new Date().getFullYear()}</p>
-        <a
-          href="https://github.com/iAmmarTahir/KnowledgeGraphGPT"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <img
-            src={GithubLogo}
-            alt="github"
-            width={20}
-            height={20}
-            className="github"
-          />
-        </a>
-      </div>
-    </div>
-  );
-}
 
-export default App;
+            <button
+              className="submitButton"
+              onClick={() => exportData(graphState?.edges)}
+              disabled={graphState?.edges?.length < 1}
+            >
+              Export JSON
+            </button>
+
+            <button
+              className="submitButton"
+              onClick={() => dispatch({ type: ACTIONS.CLEAR_GRAPH })}
+            >
+              Clear
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <div className="fo
